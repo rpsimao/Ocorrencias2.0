@@ -1,0 +1,77 @@
+<div class="container-fluid mywhite">
+	<div class="row-fluid">
+		<div class="span12 ">
+		    <div class="pull-right top-5"><span class="label label-info"><?=$this->number?></span></div>
+		    <h3><i class="icon-file-alt"></i> Ocorrência Nº<?=$this->id?></h3>
+			<table class="table table-striped txtsmall">
+				<tr>
+					<th><i class="icon-list-alt"></i> Nº</th>
+					<th><i class="icon-user"></i> Entidade</th>
+					<th><i class="icon-cog"></i> Sistema</th>
+					<th><i class="icon-share"></i> Origem</th>
+					<th><i class="icon-laptop"></i> Obra</th>
+					<th><i class="icon-picture"></i> Produto</th>
+					<th><i class="icon-pencil"></i> Editar</th>
+					<th><i class="icon-cloud"></i> PDF</th>
+				</tr>
+			    <tr>
+					<td><a href="/view/<?=$this->boletim['id']?>"><i class="icon-eye-open"></i></a>&nbsp;&nbsp;<?=$this->boletim['id']?></td>
+					<td><?=$this->boletim['entidade']?></td>
+					<td><?=$this->boletim['sistema']?></td>
+					<td><?=$this->boletim['origem']?></td>
+					<td><?=RPS_Helpers_Transform_ZeroJob::remove($this->boletim['obra']);?></td>
+					<td><?=RPS_Helpers_Transform_ShortText::reduce($this->boletim['trabalho'],35);?></td>
+					<td><a class="btn btn-mini btn-warning" href="#editModal" data-toggle="modal" data-target="#edit-modal-<?=$this->boletim['id'];?>">Editar</a></td>
+					<td>
+    					<div class="btn-group">
+                          <a class="btn btn-mini btn-info dropdown-toggle" data-toggle="dropdown" href="#">
+                            Criar PDF
+                            <span class="caret"></span>
+                          </a>
+                          <ul class="dropdown-menu">
+                            <li><a href="/export/pdf/id/<?=$this->boletim['id']?>/t/interno" target="_blank">Interno</a></li>
+                            <li class="dropdown-submenu">
+                                <a tabindex="-1" href="#">Externo</a>
+                                <ul class="dropdown-menu">
+                                  <li><a href="/export/pdf/id/<?=$this->boletim['id']?>/u/carina/t/externo" target="_blank">Carina Santos</a></li>
+                                  <li><a href="/export/pdf/id/<?=$this->boletim['id']?>/u/ana/t/externo" target="_blank">Ana Spinola</a></li>
+                                  <li><a href="/export/pdf/id/<?=$this->boletim['id']?>/u/marta/t/externo" target="_blank">Marta Cabral</a></li>
+                                  <li><a href="/export/pdf/id/<?=$this->boletim['id']?>/u/ines/t/externo" target="_blank">Ines Cardoso</a></li>
+                                  <li><a href="/export/pdf/id/<?=$this->boletim['id']?>/u/margarida/t/externo" target="_blank">Margarida Salvado</a></li>
+                                </ul>
+                          </ul>
+                        </div>
+					</td>
+				</tr>
+			  
+			</table>
+			
+		</div>
+	</div>
+</div>
+<div class="modal" id="edit-modal-<?=$this->boletim['id']?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal"
+			aria-hidden="true">×</button>
+		<h3 id="myModalLabel"><i class="icon-lock"></i> Recurso Protegido</h3>
+	</div>
+	<div class="modal-body sp-bottom-10">
+	    <div id="datesmodal-errors-form"></div>
+	    <form action="/edit/record" method="post" onsubmit="return validateEditModal(<?=$this->boletim['id']?>)">
+	        <table>
+	        <tr>
+	            <td><input type="password" id="edit-modal-passwd-<?=$this->boletim['id']?>" name="edit-modal-passwd" placeholder="Insira a password"/></td>
+	         </tr>
+	        <tr>
+	            <td><input type="submit" value="Procurar" class="btn btn-primary" /></td>
+	        </tr>
+	        </table>
+	        <input type="hidden" id="id" name="id" value="<?=$this->boletim['id']?>" />
+	   </form>
+	    
+	    
+	</div>
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal" aria-hidden="true">Fechar</button>
+	</div>
+</div>

@@ -1,0 +1,29 @@
+<?php echo $this->doctype();?>
+<html lang="pt">
+<head>
+<?php echo $this->headTitle();?>
+<?php echo $this->headMeta();?>
+<?php echo $this->headScript();?>
+<?php echo $this->headLink();?>
+
+</head>
+<body>
+
+<?=$this->Navbar($this->controllerName);?>
+    
+   
+	<div class="container">
+     <div class='notifications top-right' style="padding-top:18px;padding-right:250px;"></div>
+     <?php echo $this->layout()->content; ?>
+
+    </div>
+	<!-- /container -->
+	<div class='notifications bottom-right'></div>
+<?php echo $this->JSHelper() ?>
+<?php echo $this->partial('modals/clientemodal.phtml') ?>
+<?php echo $this->partial('modals/obramodal.phtml') ?>
+<?php echo $this->partial('modals/datasmodal.phtml') ?>
+<?php echo $this->partial('modals/numeromodal.phtml') ?>
+<?php echo $this->layout()->scriptTags; ?>
+</body>
+</html>

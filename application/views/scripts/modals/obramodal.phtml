@@ -1,0 +1,25 @@
+<div class="modal" id="jobmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal"
+			aria-hidden="true">×</button>
+		<h3 id="myModalLabel"><i class="icon-search"></i> Procurar por Nº de Obra</h3>
+	</div>
+	<div class="modal-body sp-bottom-10">
+	    <div id="jobmodal-errors-form"></div>
+	    <form action="/search/job" method="post" onsubmit="return validateJobSearch()">
+	        <table>
+	        <tr>
+	            <td><input type="text" id="job-modal-search" name="job-modal-search" placeholder="Escreva o número da obra"/></td>
+	        </tr>
+	        <tr>
+	            <td><input type="submit" value="Procurar" class="btn btn-primary" /></td>
+	        </tr>
+	        </table>
+	   </form>
+	    
+	    
+	</div>
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal" aria-hidden="true">Fechar</button>
+	</div>
+</div>

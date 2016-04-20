@@ -1,0 +1,136 @@
+<?php 
+
+$cu = new Application_Model_Optimus();
+
+$frontendOptions = array('lifetime' => 7200 ,'automatic_serialization' => true);
+
+$backendOptions = array('cache_dir' => '/tmp/');
+
+$cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
+
+if( ($customers = $cache->load('getallclients')) === false ) {
+
+    $customers = $cu->getAllCustomers();
+    $cache->save($customers, 'getallclients');
+    $customers = $cache->load('getallclients');
+
+} else {
+
+    $customers = $cache->load('getallclients');
+}
+
+?>
+
+
+<div class="modal" id="clientemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal"
+			aria-hidden="true">×</button>
+		<h3 id="myModalLabel"><i class="icon-search"></i> Procurar por Cliente</h3>
+	</div>
+	<div class="modal-body sp-bottom-50">
+	    <div id="clientemodal-errors-form"></div>
+	    <form action="/search/customers" method="post" onsubmit="return validateCustomersSearch()">
+	        <table class="sp-bottom-20">
+	        <tr>
+	            <td><input type="text" id="customer-modal-search" name="customer-modal-search" placeholder="Escreva o nome do cliente" autocomplete="off" class="input-xlarge"/></td>
+	        </tr>
+	        </table>
+	        <table>
+	        <tr>
+	        <td>Data <small>(opcional)</small></td>
+	        </tr>
+	        <tr>
+	           <td>
+	                <select id="customer-modal-mes" name="customer-modal-mes" class="span2">
+	                    <option value="" label="Mês"></option>
+	                    <option value="01">Janeiro</option>
+	                    <option value="02">Fevereiro</option>
+	                    <option value="03">Março</option>
+	                    <option value="04">Abril</option>
+	                    <option value="05">Maio</option>
+	                    <option value="06">Junho</option>
+	                    <option value="07">Julho</option>
+	                    <option value="08">Agosto</option>
+	                    <option value="09">Setembro</option>
+	                    <option value="10">Outubro</option>
+	                    <option value="11">Novembro</option>
+	                    <option value="12">Dezembro</option>
+	                </select>
+	            </td>
+	            <td class="sp-left-20">
+	                <select id="customer-modal-ano" name="customer-modal-ano" class="span1">
+	                    <option value="" label="Ano"></option>
+	                    <option value="<?=date('Y') - 4?>" label="<?=date('Y') - 4?>"></option>
+	                    <option value="<?=date('Y') - 3?>" label="<?=date('Y') - 3?>"></option>
+	                    <option value="<?=date('Y') - 2?>" label="<?=date('Y') - 2?>"></option>
+	                    <option value="<?=date('Y') - 1?>" label="<?=date('Y') - 1?>"></option>
+	                    <option value="<?=date('Y')?>"     label="<?=date('Y')?>"></option>
+	                </select>
+	            </td>
+	        </tr>
+	        </table>
+	        
+	        <table class="sp-bottom-20">
+	        <tr><td>Origem</td></tr>
+	        <tr>
+	            <td><input type="radio" name="customer-modal-origem" value="todas" checked="checked">&nbsp;Todas</td>
+	            <td>&nbsp;&nbsp;</td>
+	            <td><input type="radio" name="customer-modal-origem" value="Interna">&nbsp;Internas</td>
+	            <td>&nbsp;&nbsp;</td>
+	            <td><input type="radio" name="customer-modal-origem" value="Externa">&nbsp;Externas</td>
+	        </tr>
+	        </table>    
+	        
+	        <table  class="sp-bottom-80">
+	        <tr>
+	            <td>Ordem de Compra <small>(opcional)</small></td>
+	        </tr>
+	        <tr>
+	            <td><input type="text" id="customer-modal-oc" name="customer-modal-oc" placeholder="insira a ordem de compra" autocomplete="off"/></td>
+	        </tr>
+	        <tr>
+	            <td>&nbsp;</td>
+	        </tr>
+	        <tr>
+	            <td class="pad-top-20"><input type="submit" value="Procurar" class="btn btn-primary" /></td>
+	        </tr>
+	        </table>
+	        
+	    
+	    
+	    </form>
+	    
+	    
+	</div>
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal" aria-hidden="true">Fechar</button>
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(function() {
+		var availableTags = [<?=$customers;?>];
+		 $("#customer-modal-search").typeahead({
+			source: availableTags
+		});
+	});
+</script>
+
+<?php 
+
+function buildDia()
+{
+    $tag = null;
+    
+    for ($i = 1; $i <= 31; $i++) 
+    {
+       $tag.='<option value="'.$i.'">'.$i.'</option>';    
+    }
+
+    return $tag;
+}
+
+
+?>
+

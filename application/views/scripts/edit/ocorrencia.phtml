@@ -1,0 +1,693 @@
+<?php if ($this->errors) : ?>
+<div class="initform" id="initform">
+<legend><i class="icon-edit" id="init-edit-form"></i> Editar Ocorrência</legend>
+<?=$this->formEdit;?>
+</div>
+<?php else:?>
+<div class="container-fluid mywhite" style="padding: 20px">
+<div class="pull-right"> 
+<div class="btn-group">
+  <a class="btn dropdown-toggle btn-info btn-small" data-toggle="dropdown" href="#">
+    <i class="icon-cogs"></i> Opções
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu">
+    <li><a tabindex="-1" href="/export/pdf/id/<?=$this->id;?>/t/interno" target="_blank"><i class="icon-print"></i> Exportar para PDF</a></li>
+    <li><a tabindex="-1" href="javascript:anularOcorrencia()"><i class="icon-remove"></i> Anular Ocorrência</a></li>
+    
+  </ul>
+</div>
+</div>
+<table>
+<tr>
+    <td><h3>Ocorrencia Nº<?=$this->id;?></h3></td>
+    <td style="padding-left: 25px;"><span id="my-alerts"></span></td>
+</tr>
+</table>
+<br />
+
+		<div class="row-fluid">
+			<div class="span2">
+                <div class="tabbable tabs-left">
+					<ul class="nav nav-tabs">
+					    <li class="active"><a href="#tab1" data-toggle="tab"><i class="icon-info-sign"></i> Identificação</a></li>
+						<li><a href="#tab2" data-toggle="tab"><i class="icon-filter"></i> Análise</a></li>
+						<li><a href="#tab3" data-toggle="tab"><i class="icon-cogs"></i> Acções</a></li>
+						<li><a href="#tab4" data-toggle="tab"><i class="icon-key"></i> Fecho</a></li>
+					</ul>
+				</div>
+			</div>
+			
+			<div class="span10 mywhite">
+				<div class="row-fluid">
+					<div class="span10">
+						<div class="tab-content">
+							<div class="tab-pane active space" id="tab1">
+							    <form id="update_registo_form" class="form-horizontal" enctype="application/x-www-form-urlencoded" method="post" action="/edit/update">
+                <table>
+                    <tr>
+                    <td>
+                    <div class="control-group" id="tipo_registo_div">
+                        <label class="control-label cinza" for="tipo_registo" id="tipo_registo-label"><i class="icon-map-marker"></i> Tipo de Registo:<span class="txt-req">*</span></label>
+                        <div class="controls">
+                            <?=$this->form->getElement('tipo_registo')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'span8'));?>
+                        </div>
+                    </div>
+                   </td>
+                   </tr>
+                   <tr>
+                   <td>
+                    <div class="control-group" id="origem_div">
+                        <label class="control-label cinza" for="origem" id="origem-label"><i class="icon-filter"></i> Origem:<span class="txt-req">*</span></label>
+                        <div class="controls">
+                            <?=$this->form->getElement('origem')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'span8'));?>
+                        </div>
+                    </div>
+                   </td>
+                   <td>
+                    <div class="control-group" id="sistema_div">
+                        <label class="control-label cinza" for="sistema" id="tipo_sistema-label"><i class="icon-cog"></i> Sistema:<span class="txt-req">*</span></label>
+                        <div class="controls">
+                            <?=$this->form->getElement('sistema')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'span8'));?>
+                        </div>
+                    </div>
+                   </td>
+                   </tr> 
+                 </table>
+                 
+                 <table>
+                     <tr>
+                         <td>
+                             <div class="control-group" id="obra_div">
+                                <label class="control-label cinza" for="obra" id="obra-label"><i class="icon-folder-open"></i> Obra:</label>
+                            <div class="controls">
+                            <?=$this->form->getElement('obra')->setDecorators(array('ViewHelper'))->setAttribs(array("onblur"=>"checkRepeatJob();", "onfocus"=>'getJobParams();onlyInt("obra")', "class"=>"input-small"));?>
+                            </div>
+                            </div>
+                         </td>
+                         <td>
+                             <div class="control-group" id="entidade_div">
+                                <label class="control-label cinza" for="entidade" id="entidade-label"><i class="icon-group"></i> Entidade/Cliente:<span class="txt-req">*</span></label>
+                            <div class="controls">
+                            <?=$this->form->getElement('entidade')->setDecorators(array('ViewHelper'))->setAttrib('class', 'input-xlarge');?>
+                            </div>
+                            </div>
+                         </td>
+                     </tr>
+                    </table> 
+                    <table>
+                     <tr>
+                         <td>
+                             <div class="control-group" id="trabalho_div">
+                                <label class="control-label cinza" for="trabalho" id="trabalho-label">
+                                
+                                <i class="icon-laptop"></i> Trabalho:<span class="txt-req">*</span>
+                                </label>
+                            <div class="controls">
+                            <?=$this->form->getElement('trabalho')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=> 'input-xlarge', 'onblur'=>'revertCSS();'));?>
+                            </div>
+                            </div>
+                         </td>
+                         
+                         <td>
+                        
+                             <div class="control-group">
+                              
+                                <label class="control-label cinza" for="jobtype" id="jobtype-label">
+                                 <span id="get-job-type-button" class="btn btn-mini btn-info" onclick="getJobType()"><i class="icon-cloud-download"></i></span>
+                                <i class="icon-eraser"></i> Tipo Trabalho:</label>
+                            <div class="controls">
+                            <?=$this->form->getElement('jobtype')->setDecorators(array('ViewHelper'))->setAttrib('class', 'input-small');?>
+                            
+                            </div>
+                            </div>
+                         </td>
+                         
+                     </tr>
+                 </table>       
+                  <table>
+                     <tr>
+                         <td>
+                             <div class="control-group">
+                                <label class="control-label cinza" for="matcert" id="matcert-label"><i class="icon-leaf"></i> Mat. Prima Certf. (FSC/PEFC):</label>
+                            <div class="controls">
+                            <?=$this->form->getElement('matcert')->setDecorators(array('ViewHelper'));?>
+                            </div>
+                            </div>
+                         </td>
+                         <td>
+                             <div class="control-group">
+                                <label class="control-label cinza" for="lote" id="lote-label"><i class="icon-inbox"></i> Lote:</label>
+                            <div class="controls">
+                            <?=$this->form->getElement('lote')->setDecorators(array('ViewHelper'))->setAttrib('class', 'input-medium');?>
+                            </div>
+                            </div>
+                         </td>
+                         </tr>
+                  </table>
+                  <table>
+                      <tr>       
+                         <td>
+                             <div class="control-group">
+                                <label class="control-label cinza" for="doc_referencia" id="doc_referencia-label"><i class="icon-file"></i> Doc. Refer&ecirc;ncia:</label>
+                            <div class="controls">
+                            <?=$this->form->getElement('doc_referencia')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'input-xxlarge'));?>
+                            </div>
+                            </div>
+                         </td>
+                         
+                     </tr>
+                 </table>  
+                
+                 <table>
+                     <tr>
+                         <td>
+                             <div class="control-group">
+                                <label class="control-label cinza" for="qtd_recebida" id="qtd_recebida-label"><i class="icon-download-alt"></i> Qtd. Recebida:</label>
+                            <div class="controls">
+                            <?=$this->form->getElement('qtd_recebida')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'input-mini', 'onfocus'=>'onlyInt("qtd_recebida")'));?>
+                            </div>
+                            </div>
+                         </td>
+                         <td>
+                             <div class="control-group">
+                                <label class="control-label cinza" for="qtd_reclamada" id="qtd_reclamada-label"><i class="icon-bullhorn"></i> Qtd. Reclamada:</label>
+                            <div class="controls">
+                            <?=$this->form->getElement('qtd_reclamada')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'input-mini', 'onfocus'=>'onlyInt("qtd_reclamada")'));?>
+                            </div>
+                            </div>
+                         </td>
+                         <td>
+                             <div class="control-group">
+                                <label class="control-label cinza" for="qtd_falta" id="qtd_falta-label"><i class="icon-upload-alt"></i> Qtd. em Falta:</label>
+                            <div class="controls">
+                            <?=$this->form->getElement('qtd_falta')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'input-mini', 'onfocus'=>'onlyInt("qtd_falta")', 'onblur'=>'custo()'));?>
+                            </div>
+                            </div>
+                         </td>
+                     </tr>
+                 </table> 
+                
+                <table>
+                     <tr>
+                         <td>
+                             <div class="control-group">
+                                <label class="control-label cinza" for="ordem_compra"  id="ordem_compra-label"><i class="icon-file-alt"></i> Ordem Compra:</label>
+                            <div class="controls">
+                            <?=$this->form->getElement('ordem_compra')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'input-small'));?>
+                            </div>
+                            </div>
+                         </td>
+                         <td>
+                             <div class="control-group">
+                                <label class="control-label cinza" for="amostra_disponivel" id="amostra_disponivel-label"><i class="icon-picture"></i> Amostra Disponível:</label>
+                            <div class="controls">
+                            <?=$this->form->getElement('amostra_disponivel')->setDecorators(array('ViewHelper'));?>
+                            </div>
+                            </div>
+                         </td>
+                         <td>
+                             <div class="control-group">
+                                <label class="control-label cinza" for="situacao_recorrente" id="situacao_recorrente-label"><i class="icon-refresh"></i> Situação Recorrente:</label>
+                            <div class="controls">
+                            <?=$this->form->getElement('situacao_recorrente')->setDecorators(array('ViewHelper'));?>
+                            </div>
+                            </div>
+                         </td>
+                     </tr>
+                 </table> 
+                <div class="control-group" id="descricao_problema_div">
+                                <label class="control-label cinza" for="descricao_problema"  id="descricao_problema-label"><i class="icon-edit"></i> Descri&ccedil;&atilde;o Problema:<span class="txt-req">*</span></label>
+                            <div class="controls">
+                            <?=$this->form->getElement('descricao_problema')->setDecorators(array('ViewHelper'))->setAttribs(array("rows"=>"6", "class"=>"span11"));?>
+                            </div>
+                </div>
+                
+                <table>
+                  <tr>
+                   
+                   <td>
+                    <div class="control-group">
+                        <label class="control-label cinza" for="detectado" id="detectado-label"><i class="icon-user"></i> Detectado por:</label>
+                        <div class="controls">
+                            <?=$this->form->getElement('detectado')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'input-medium'));?>
+                        </div>
+                    </div>
+                   </td>
+                     <td>
+                    <div class="control-group" id="data_detectada_div">
+                        <label class="control-label cinza" for="data_detectada"  id="data_detectada-label">Data:</label>
+                        <div class="controls">
+                            <div class="input-prepend"><span class="add-on"><i class="icon-calendar"></i></span>
+                            <?=$this->form->getElement('data_detectada')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'input-small'));?>
+                            </div>
+                        </div>
+                    </div>
+                   </td>
+                   </tr>
+                   </table>
+                   <table>
+                   <tr>
+                    <td>
+                    <div class="control-group">
+                        <label class="control-label cinza" for="detectado" id="detectado-label"><i class="icon-user"></i> Codificação do Defeito:</label>
+                        <div class="controls">
+                            <?=$this->form->getElement('cod_def')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'input-xxlarge'));?>
+                        </div>
+                    </div>
+                   </td>
+                   
+                   
+                   </tr> 
+                 </table>
+                <div class="form-actions">
+                      <?=$this->form->getElement('submit')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'btn btn-primary'));?>
+                </div>
+                
+                
+							
+							
+			</div><!-- Fim tab1 -->
+							
+			<div class="tab-pane space" id="tab2">
+			  <div class="tabbable">
+					<ul class="nav nav-tabs">
+					    <li class="active"><a href="#tab2a" data-toggle="tab"><i class="icon-user"></i> Decisão QAS</a></li>
+						<li><a href="#tab2b" data-toggle="tab"><i class="icon-filter"></i> Investigação Efectuada</a></li>
+						<li><a href="#tab2c" data-toggle="tab"><i class="icon-bullseye"></i> Identificação das Causas</a></li>
+					</ul>
+				</div>
+				
+				<div class="tab-content">
+				    <div class="tab-pane active" id="tab2a">
+				             <label class="checkbox inline" id="notificacao-label">
+                              <?=$this->form->getElement('notificacao')->setDecorators(array('ViewHelper'));?> Notificação
+                                </label>
+                            <label class="checkbox inline" id="rejeicao-label">
+                              <?=$this->form->getElement('rejeicao')->setDecorators(array('ViewHelper'));?> Rejei&ccedil;&atilde;o
+                            </label>
+                            <label class="checkbox inline" id="nao_aceite-label">
+                              <?=$this->form->getElement('nao_aceite')->setDecorators(array('ViewHelper'));?> N&atilde;o aceite
+                            </label>
+                            <label class="checkbox inline" id="registo-label">
+                              <?=$this->form->getElement('registo')->setDecorators(array('ViewHelper'));?> Registo
+                            </label>
+                            <label class="checkbox inline" id="reavaliacao-label">
+                              <?=$this->form->getElement('reavaliacao')->setDecorators(array('ViewHelper'));?> Reavalia&ccedil;&atilde;o
+                            </label>
+                    
+				    </div>
+				
+				    <div class="tab-pane" id="tab2b">
+				             <div class="control-group">
+                                <label class="control-label cinza" for="investigacao_efectuada"  id="investigacao_efectuada-label"><i class="icon-pencil"></i> Invertigação efectuada:</label>
+                                <div class="controls">
+                                    <?=$this->form->getElement('investigacao_efectuada')->setDecorators(array('ViewHelper'))->setAttribs(array("rows"=>"8", "class"=>"span11"));?>
+                                </div>
+                            </div>
+                    
+                    <div class="control-group">
+                        <label class="control-label cinza" for="data_investigacao" id="data_investigacao-label">Data Investiga&ccedil;&atilde;o:</label>
+                        <div class="controls">
+                          <div class="input-prepend"><span class="add-on"><i class="icon-calendar"></i></span>
+                            <?=$this->form->getElement('data_investigacao')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'input-small'));?>
+                          </div>  
+                        </div>
+                    </div>
+                    <div class="control-group">
+                                <label class="control-label cinza" for="preenchido_investigacao" id="preenchido_investigacao-label"><i class="icon-user"></i> Preenchido por:</label>
+                                <div class="controls">
+                                    <?=$this->form->getElement('preenchido_investigacao')->setDecorators(array('ViewHelper'))->setAttribs(array("autocomplete" => "off"));?>
+                                </div>
+                            </div>
+                        
+				    </div>
+				
+				    <div class="tab-pane" id="tab2c">
+				    
+				        <div class="control-group">
+                                <label class="control-label cinza" for="id_causas"  id="id_causas-label"><i class="icon-pencil"></i> Identificação das causas:</label>
+                                <div class="controls">
+                                    <?=$this->form->getElement('id_causas')->setDecorators(array('ViewHelper'))->setAttribs(array("rows"=>"8", "class"=>"span11"));?>
+                                </div>
+                            </div>
+                    
+                    <div class="control-group">
+                        <label class="control-label cinza" for="data_causas" id="data_causas-label">Data Causas:</label>
+                        <div class="controls">
+                          <div class="input-prepend"><span class="add-on"><i class="icon-calendar"></i></span>
+                            <?=$this->form->getElement('data_causas')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'input-small'));?>
+                          </div>  
+                        </div>
+                    </div>
+                    <div class="control-group">
+                                <label class="control-label cinza" for="responsavel_causas" id="responsavel_causas-label"><i class="icon-user"></i> Operador:</label>
+                                <div class="controls">
+                                    <?=$this->form->getElement('responsavel_causas')->setDecorators(array('ViewHelper'))->setAttribs(array("autocomplete" => "off"));?>
+                                </div>
+                            </div>
+                     <div class="control-group">
+                                <label class="control-label cinza" for="seccao_causas" id="seccao_causas-label"><i class="icon-location-arrow"></i> Secção:</label>
+                                <div class="controls">
+                                    <?=$this->form->getElement('seccao_causas')->setDecorators(array('ViewHelper'))->setAttribs(array(''));?>
+                                </div>
+                            </div>       
+				    
+				    
+				             
+				    </div>
+				    
+				    
+				    
+				    
+				    
+				    
+				    <div class="control-group sp-top-50 span10 divide">
+                        <label class="control-label cinza" for="impacto_ambiental" id="impacto_ambiental-label"><i class="icon-leaf"></i> Impacto Ambiental:</label>
+                        <div class="controls">
+                            <?=$this->form->getElement('impacto_ambiental')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'input-xxlarge'));?>
+                        </div>
+                    </div>
+                    
+                    <div class="control-group span10">
+                        <label class="control-label cinza" for="perigos" id="perigos-label"><i class="icon-warning-sign"></i> Perigos e Riscos:</label>
+                        <div class="controls">
+                            <?=$this->form->getElement('perigos')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'input-xxlarge'));?>
+                        </div>
+                    </div>      
+				    
+				    
+				</div> 			
+					
+					<div class="form-actions">
+                      <?=$this->form->getElement('submit')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'btn btn-primary'));?>
+                </div>		
+			
+			</div><!-- Fim tab2 -->
+							
+			<div class="tab-pane space" id="tab3">
+			
+			     <div class="tabbable">
+					<ul class="nav nav-tabs">
+					    <li class="active"><a href="#tab3a" data-toggle="tab"><i class="icon-book"></i> Acções Correctivas</a></li>
+						<li><a href="#tab3b" data-toggle="tab"><i class="icon-book"></i> Acções Correcção</a></li>
+						<li><a href="#tab3c" data-toggle="tab"><i class="icon-book"></i> Acções Preventivas</a></li>
+						<li><a href="#tab3d" data-toggle="tab"><i class="icon-book"></i> Acções Melhoria</a></li>
+					</ul>
+				</div>
+			
+			<div class="tab-content">
+				    <div class="tab-pane active" id="tab3a">
+				    <div class="control-group">
+                                <label class="control-label cinza" for="def_ac_prev_corr"  id="def_ac_prev_corr-label"><i class="icon-pencil"></i> Definicção Acções Correctivas:</label>
+                                <div class="controls">
+                                    <?=$this->form->getElement('def_ac_prev_corr')->setDecorators(array('ViewHelper'))->setAttribs(array("rows"=>"8", "class"=>"span11"));?>
+                                </div>
+                            </div>
+				    <div class="control-group">
+                        <label class="control-label cinza" for="data_ac_prev_corr" id="data_ac_prev_corr-label">Data Causas:</label>
+                        <div class="controls">
+                          <div class="input-prepend"><span class="add-on"><i class="icon-calendar"></i></span>
+                            <?=$this->form->getElement('data_ac_prev_corr')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'input-small'));?>
+                          </div>  
+                        </div>
+                    </div>
+                    <div class="control-group">
+                                <label class="control-label cinza" for="resp_ac_prev_corr" id="resp_ac_prev_corr-label"><i class="icon-user"></i> Operador:</label>
+                                <div class="controls">
+                                    <?=$this->form->getElement('resp_ac_prev_corr')->setDecorators(array('ViewHelper'))->setAttribs(array("autocomplete"=>"off"));?>
+                                </div>
+                            </div>
+				    <div class="control-group">
+                        <label class="control-label cinza" for="custo_ac_prev_corr" id="custo_ac_prev_corr-label">Custo:</label>
+                        <div class="controls">
+                          <div class="input-prepend"><span class="add-on">&euro;</span>
+                            <?=$this->form->getElement('custo_ac_prev_corr')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'input-small', 'onfocus'=>'onlyFloat("custo_ac_prev_corr")'));?>
+                          </div>  
+                        </div>
+                    </div>
+				    <div class="control-group">
+                        <label class="control-label cinza" for="prazo_ac_prev_corr" id="prazo_ac_prev_corr-label">Prazo:</label>
+                        <div class="controls">
+                          <div class="input-prepend"><span class="add-on"><i class="icon-calendar"></i></span>
+                            <?=$this->form->getElement('prazo_ac_prev_corr')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'input-small'));?>
+                          </div>  
+                        </div>
+                    </div>
+				     <div class="control-group">
+                                <label class="control-label cinza" for="fechado_ac_prev_corr" id="fechado_ac_prev_corr-label"><i class="icon-question-sign"></i> Acção pode ser fechada?</label>
+                                <div class="controls">
+                                    <?=$this->form->getElement('fechado_ac_prev_corr')->setDecorators(array('ViewHelper'));?>
+                                </div>
+                      </div>
+                </div>	    
+			
+			<div class="tab-pane" id="tab3b">
+			     <div class="control-group">
+                                <label class="control-label cinza" for="abertura_obra" id="abertura_obra-label"><i class="icon-file-alt"></i> Abertura Novo Boletim de Obra:</label>
+                                <div class="controls">
+                                    <?=$this->form->getElement('abertura_obra')->setDecorators(array('ViewHelper'));?>
+                                </div>
+                      </div><br />
+                 <div class="control-group">
+                                <label class="control-label cinza" for="correcoes"  id="correcoes-label"><i class="icon-pencil"></i> Ac&ccedil;&otilde;es para Correc&ccedil;&atilde;o:</label>
+                                <div class="controls">
+                                    <?=$this->form->getElement('correcoes')->setDecorators(array('ViewHelper'))->setAttribs(array("rows"=>"8", "class"=>"span11"));?>
+                                </div>
+                            </div>     
+                   <div class="control-group">
+                        <label class="control-label cinza" for="data_correccoes" id="data_correccoes-label">Data Correc&ccedil;&otilde;es:</label>
+                        <div class="controls">
+                          <div class="input-prepend"><span class="add-on"><i class="icon-calendar"></i></span>
+                            <?=$this->form->getElement('data_correccoes')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'input-small'));?>
+                          </div>  
+                        </div>
+                    </div>    
+                    <div class="control-group">
+                        <label class="control-label cinza" for="custo_correccoes" id="custo_correccoes-label">Custo Correc&ccedil;&otilde;es:</label>
+                        <div class="controls">
+                          <div class="input-prepend"><span class="add-on">&euro;</span>
+                            <?=$this->form->getElement('custo_correccoes')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'input-small', 'onfocus'=>'onlyFloat("custo_correccoes")', "autocomplete"=> "off"));?>
+                          </div>  
+                        </div>
+                    </div>  
+                  <div class="control-group">
+                                <label class="control-label cinza" for="resp_correccoes" id="resp_correccoes-label"><i class="icon-user"></i> Responsável Correcções:</label>
+                                <div class="controls">
+                                    <?=$this->form->getElement('resp_correccoes')->setDecorators(array('ViewHelper'))->setAttribs(array("autocomplete" => "off"));?>
+                                </div>
+                            </div>    
+                      
+			</div>
+			
+			
+			<div class="tab-pane" id="tab3c">
+			    
+			  <div class="control-group">
+                   <label class="control-label cinza" for="def_acc_prev"  id="def_acc_prev-label"><i class="icon-pencil"></i> Definic&ccedil;&atilde;o Ac&ccedil;&otilde;es Preventivas:</label>
+                      <div class="controls">
+                           <?=$this->form->getElement('def_ac_preventivas')->setDecorators(array('ViewHelper'))->setAttribs(array("rows"=>"8", "class"=>"span11"));?>
+                       </div>
+             </div>     
+			 <div class="control-group">
+                                <label class="control-label cinza" for="resp_acc_prev" id="resp_acc_prev-label"><i class="icon-user"></i> Responsável:</label>
+                                <div class="controls">
+                                    <?=$this->form->getElement('resp_ac_preventivas')->setDecorators(array('ViewHelper'))->setAttribs(array("autocomplete" => "off"));?>
+                                </div>
+                            </div>     
+			   <div class="control-group">
+                        <label class="control-label cinza" for="custo_acc_prev" id="custo_acc_prev-label">Custo:</label>
+                        <div class="controls">
+                          <div class="input-prepend"><span class="add-on">&euro;</span>
+                            <?=$this->form->getElement('custo_ac_preventivas')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'input-small', 'onfocus'=>'onlyFloat("custo_ac_preventivas")'));?>
+                          </div>  
+                        </div>
+                    </div>
+                 <div class="control-group">
+                        <label class="control-label cinza" for="prazo_ac_preventivas" id="prazo_ac_preventivas-label">Prazo:</label>
+                        <div class="controls">
+                          <div class="input-prepend"><span class="add-on"><i class="icon-calendar"></i></span>
+                            <?=$this->form->getElement('prazo_ac_preventivas')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'input-small'));?>
+                          </div>  
+                        </div>
+                    </div>    
+			    <div class="control-group">
+                                <label class="control-label cinza" for="fechado_ac_preventivas" id="fechado_ac_preventivas-label"><i class="icon-question-sign"></i> Acção pode ser fechada?</label>
+                                <div class="controls">
+                                    <?=$this->form->getElement('fechado_ac_preventivas')->setDecorators(array('ViewHelper'));?>
+                                </div>
+                      </div>
+			</div>    
+			
+			
+			<div class="tab-pane" id="tab3d">
+			    <div class="control-group">
+                   <label class="control-label cinza" for="def_ac_melhoria"  id="def_ac_melhoria-label"><i class="icon-pencil"></i> Definic&ccedil;&atilde;o Ac&ccedil;&otilde;es Melhoria:</label>
+                      <div class="controls">
+                           <?=$this->form->getElement('def_ac_melhoria')->setDecorators(array('ViewHelper'))->setAttribs(array("rows"=>"8", "class"=>"span11"));?>
+                       </div>
+             </div> 
+             <div class="control-group">
+                        <label class="control-label cinza" for="data_ac_melhoria" id="data_ac_melhoria-label">Data Ac&ccedil;&otilde;es Melhoria:</label>
+                        <div class="controls">
+                          <div class="input-prepend"><span class="add-on"><i class="icon-calendar"></i></span>
+                            <?=$this->form->getElement('data_ac_melhoria')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'input-small'));?>
+                          </div>  
+                        </div>
+                    </div>     
+			 <div class="control-group">
+                                <label class="control-label cinza" for="resp_ac_melhoria" id="resp_ac_melhoria-label"><i class="icon-user"></i> Responsável:</label>
+                                <div class="controls">
+                                    <?=$this->form->getElement('resp_ac_melhoria')->setDecorators(array('ViewHelper'))->setAttribs(array("autocomplete"=>"off"));?>
+                                </div>
+                            </div>     
+			   <div class="control-group">
+                        <label class="control-label cinza" for="custo_ac_melhoria" id="custo_ac_melhoria-label">Custo:</label>
+                        <div class="controls">
+                          <div class="input-prepend"><span class="add-on">&euro;</span>
+                            <?=$this->form->getElement('custo_ac_melhoria')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'input-small', 'onfocus'=>'onlyFloat("custo_ac_melhoria")'));?>
+                          </div>  
+                        </div>
+                    </div>
+                 <div class="control-group">
+                        <label class="control-label cinza" for="prazo_ac_melhoria" id="prazo_ac_melhoria-label">Prazo:</label>
+                        <div class="controls">
+                          <div class="input-prepend"><span class="add-on"><i class="icon-calendar"></i></span>
+                            <?=$this->form->getElement('prazo_ac_melhoria')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'input-small'));?>
+                          </div>  
+                        </div>
+                    </div>    
+			    <div class="control-group">
+                                <label class="control-label cinza" for="fechado_ac_melhoria" id="fechado_ac_melhoria-label"><i class="icon-question-sign"></i> Acção pode ser fechada?</label>
+                                <div class="controls">
+                                    <?=$this->form->getElement('fechado_ac_melhoria')->setDecorators(array('ViewHelper'));?>
+                                </div>
+                      </div>
+			</div>
+			
+			</div>
+			<div class="form-actions">
+                      <?=$this->form->getElement('submit')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'btn btn-primary'));?>
+                </div>					
+			</div><!-- Fim tab3 -->
+							
+			<div class="tab-pane space" id="tab4">
+			<div class="tab-content">
+			    <div class="control-group">
+                   <label class="control-label cinza" for="info_adicional"  id="info_adicional-label"><i class="icon-pencil"></i> Informa&ccedil;&atilde;o Adicional:</label>
+                      <div class="controls">
+                           <?=$this->form->getElement('info_adicional')->setDecorators(array('ViewHelper'))->setAttribs(array("rows"=>"8", "class"=>"span11"));?>
+                       </div>
+             </div> 
+			 <div class="control-group">
+                                <label class="control-label cinza" for="resultado" id="resultado-label"><i class="icon-edit-sign"></i> Resultado:</label>
+                                <div class="controls">
+                                    <?=$this->form->getElement('resultado')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'input-xxlarge'));?>
+                                </div>
+                            </div>
+			<div class="control-group">
+                                <label class="control-label cinza" for="eficaz" id="eficaz-label"><i class="icon-dashboard"></i> Eficaz:</label>
+                                <div class="controls">
+                                    <?=$this->form->getElement('eficaz')->setDecorators(array('ViewHelper'));?>
+                                </div>
+                            </div>
+                            <br />
+			<div class="control-group">
+                                <label class="control-label cinza" for="evento_fechado" id="evento_fechado-label"><i class="icon-question-sign"></i> Evento Pode ser Fechado?</label>
+                                <div class="controls">
+                                    <?=$this->form->getElement('evento_fechado')->setDecorators(array('ViewHelper'));?> Sim
+                                </div>
+                      </div><br />
+			
+			<div class="control-group">
+                        <label class="control-label cinza" for="custo_total" id="custo_total-label">Custo Total:</label>
+                        <div class="controls">
+                          <div class="input-prepend"><span class="add-on">&euro;</span>
+                            <?=$this->form->getElement('custo_total')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'input-small', 'onfocus'=>'onlyFloat("custo_total")'));?>
+                          </div>  
+                        </div>
+                    </div>
+			<div class="control-group">
+                                <label class="control-label cinza" for="resp_fecho" id="resp_fecho-label"><i class="icon-user"></i> Responsável:</label>
+                                <div class="controls">
+                                    <?=$this->form->getElement('resp_fecho')->setDecorators(array('ViewHelper'))->setAttribs(array("autocomplete"=>"off"));?>
+                                </div>
+                            </div> 
+            <div class="control-group">
+                        <label class="control-label cinza" for="data_fecho" id="data_fecho-label">Data resposta ao cliente:</label>
+                        <div class="controls">
+                          <div class="input-prepend"><span class="add-on"><i class="icon-calendar"></i></span>
+                            <?=$this->form->getElement('respcliente')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'input-small'));?>
+                          </div>  
+                        </div>
+                    </div>                  
+			<div class="control-group">
+                        <label class="control-label cinza" for="data_fecho" id="data_fecho-label">Data fecho:</label>
+                        <div class="controls">
+                          <div class="input-prepend"><span class="add-on"><i class="icon-calendar"></i></span>
+                            <?=$this->form->getElement('data_fecho')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'input-small'));?>
+                          </div>  
+                        </div>
+                    </div>  
+                    
+                    
+                    
+			
+			</div>
+			<div class="form-actions">
+                      <?=$this->form->getElement('submit')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'btn btn-primary'));?>
+                </div>	
+			</div><!-- Fim tab4 -->
+							
+    </div>	
+   </div>
+  </div>
+</div>    
+			
+			
+			
+		</div>
+</div>		
+
+
+<?=$this->form->getElement('anulada')->setDecorators(array('ViewHelper'));?>
+<?=$this->form->getElement('id')->setDecorators(array('ViewHelper'));?>
+</form>
+
+
+<div class="modal" id="modal-anulada" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal"
+			aria-hidden="true">×</button>
+		<h3 id="myModalLabel"><i class="icon-info-sign"></i> Motivo da Anulação</h3>
+	</div>
+	<div class="modal-body">
+	
+	    <i class="icon-pencil"></i> Colocar na Descrição do problema o motivo da Anulação.
+	    
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Fechar</button>
+	</div>
+</div>
+
+
+
+
+
+
+<script type="text/javascript">
+	$(function() {
+		var availableTags = [<?=$this->fromPluginPessoal;?>];
+		 $("#preenchido_investigacao").typeahead({source: availableTags});
+		 $("#responsavel_causas").typeahead({source: availableTags});
+		 $("#resp_ac_prev_corr").typeahead({source: availableTags});
+		 $("#resp_correccoes").typeahead({source: availableTags});
+		 $("#resp_ac_melhoria").typeahead({source: availableTags});
+		 $("#resp_fecho").typeahead({source: availableTags});
+		 $("#resp_ac_preventivas").typeahead({source: availableTags});
+	});
+</script>
+
+<?php endif;?>
+

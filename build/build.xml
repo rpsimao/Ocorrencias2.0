@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Application"  default="main" basedir=".">
+
+	<!-- Set date -->
+	<tstamp>
+		<format property="DATE" pattern="%c" locale="pt_PT" />
+	</tstamp>
+	
+	<target name="main" >
+			
+			
+                <phing phingfile="deploy.xml" inheritRefs="true" target="main" />
+            
+    </target>
+</project>

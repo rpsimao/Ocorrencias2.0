@@ -1,0 +1,26 @@
+<div class="modal" id="edit-modal-<?=$this->id?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal"
+			aria-hidden="true">×</button>
+		<h3 id="myModalLabel"><i class="icon-lock"></i> Recurso Protegido</h3>
+	</div>
+	<div class="modal-body sp-bottom-10">
+	    <div id="datesmodal-errors-form"></div>
+	    <form action="/edit/record" method="post" onsubmit="return validateEditModal(<?=$this->id?>)">
+	        <table>
+	        <tr>
+	            <td><input type="password" id="edit-modal-passwd-<?=$this->id?>" name="edit-modal-passwd" placeholder="Insira a password"/></td>
+	         </tr>
+	        <tr>
+	            <td><input type="submit" value="Procurar" class="btn btn-primary" /></td>
+	        </tr>
+	        </table>
+	        <input type="hidden" id="id" name="id" value="<?=$this->id?>" />
+	   </form>
+	    
+	    
+	</div>
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal" aria-hidden="true">Fechar</button>
+	</div>
+</div>

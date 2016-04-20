@@ -1,0 +1,18 @@
+<?php 
+if ($this->errors) :
+?>
+<div class="initform" id="initform">
+<legend><i class="icon-lock" id="init-lock-form"></i> Exportar Ocorrência</legend>
+<?=$this->formExport->render();?>
+</div>
+<script type="text/javascript">
+$(function(){
+	$("#password").focus();
+});
+
+</script>
+<?php else :
+
+header("Content-type:application/pdf");
+echo $this->document;
+endif;?>

@@ -1,0 +1,63 @@
+<div id="flash-email"></div>
+<div class="container-fluid mywhite">
+	<div class="row-fluid">
+		<div class="span12 ">
+		    <?php if (count($this->paginator) > 0):?>
+		    <div class="pull-right top-5"><span class="label label-info"><?=$this->number?></span></div>
+		    <h3><i class="icon-file-alt"></i> Lista de Ocorrências <?=$this->titulo;?></h3>
+			<table class="table table-striped txtsmall">
+				<tr>
+					<th><i class="icon-list-alt"></i> Nº</th>
+					<th><i class="icon-user"></i> Entidade</th>
+					<th><i class="icon-cog"></i> Sistema</th>
+					<th><i class="icon-share"></i> Origem</th>
+					<th><i class="icon-laptop"></i> Obra</th>
+					<th><i class="icon-picture"></i> Produto</th>
+					<th><i class="icon-pencil"></i> Editar</th>
+					<th><i class="icon-cloud"></i> PDF</th>
+				</tr>
+			    <?php foreach ($this->paginator as $boletim):?>
+			    
+			    <tr>
+					<td><a href="/view/<?=$boletim['id']?>"><i class="icon-eye-open"></i></a>&nbsp;&nbsp;<?=$boletim['id']?></td>
+					<td>&nbsp;<?=$boletim['entidade']?></td>
+					<td><a href="/search/searchgroup/group/entidade/name/<?=urlencode($boletim['entidade'])?>/sistema/<?=$boletim['sistema']?>/type/1"><i class="icon-search"></i></a><?=$boletim['sistema']?></td>
+					<td><a href="/search/searchgroup/group/entidade/name/<?=urlencode($boletim['entidade'])?>/sistema/<?=$boletim['sistema']?>/type/5/origem/<?=$boletim['origem']?>"><i class="icon-search"></i></a><?=$boletim['origem']?></td>
+					<td><?=RPS_Helpers_Transform_ZeroJob::remove($boletim['obra']);?></td>
+					<td><?=RPS_Helpers_Transform_ShortText::reduce($boletim['trabalho'],35);?></td>
+					<td><a class="btn btn-mini btn-warning" href="#editModal" data-toggle="modal" data-target="#edit-modal-<?=$boletim['id'];?>">Editar</a></td>
+					<td>
+    					<div class="btn-group">
+                          <a class="btn btn-mini btn-info dropdown-toggle" data-toggle="dropdown" href="#">
+                            Criar PDF
+                            <span class="caret"></span>
+                          </a>
+                          <ul class="dropdown-menu">
+                            <li><a href="/export/pdf/id/<?=$boletim['id']?>/t/interno" target="_blank">Interno</a></li>
+                            <li class="dropdown-submenu">
+                                <a tabindex="-1" href="#">Externo</a>
+                                <ul class="dropdown-menu">
+                                  <li><a href="/export/pdf/id/<?=$boletim['id']?>/u/carina/t/externo" target="_blank">Carina Santos</a></li>
+                                  <li><a href="/export/pdf/id/<?=$boletim['id']?>/u/ana/t/externo" target="_blank">Ana Spinola</a></li>
+                                  <li><a href="/export/pdf/id/<?=$boletim['id']?>/u/marta/t/externo" target="_blank">Marta Cabral</a></li>
+                                  <li><a href="/export/pdf/id/<?=$boletim['id']?>/u/ines/t/externo" target="_blank">Ines Cardoso</a></li>
+                                  <li><a href="/export/pdf/id/<?=$boletim['id']?>/u/margarida/t/externo" target="_blank">Margarida Salvado</a></li>
+                                </ul>
+                          </ul>
+                        </div>
+					</td>
+				</tr>
+			    <?php endforeach;?>
+			</table>
+			<?=$this->paginationControl($this->boletins, 'Sliding', 'pagination/pagination.phtml');?>
+	        <?php else:?>
+	            <div class="alert alert-info sp-top-10 sp-bottom-50">
+                  <button type="button" class="close" data-dismiss="alert">&times;</button>
+                  <h4><i class="icon-warning-sign"></i> Atenção</h4>
+                  <p>Não foi encontrada nenhuma ocorrencia para a Obra Nº<?=$this->obra?>.</p>
+              </div>
+	        <?php endif;?>
+		</div>
+	</div>
+</div>
+<?php echo $this->partialLoop('modals/editmodal.phtml', $this->paginator) ?>

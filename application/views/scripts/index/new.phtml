@@ -1,0 +1,236 @@
+<?php if ($this->errors) : ?>
+
+
+<div class="initform" id="initform">
+<legend><i class="icon-lock" id="init-lock-form"></i> Autenticação</legend>
+<?=$this->initform->render();?>
+</div>
+<script type="text/javascript">
+$(function(){
+	$("#password").focus();
+});
+
+</script>
+
+
+
+<?php else:?>
+ 
+ 
+ 
+ 
+ <div class="container-fluid "> 
+        <div class="row-fluid"> 
+           <div class="span10 registo">
+           
+            <span id="msg"></span>
+            
+                <h3><i class="icon-edit"></i> <u>Criar Registo de Ocorrência</u></h3><br />
+                <form id="new_registo_form" class="form-horizontal" enctype="application/x-www-form-urlencoded" method="post" action="/new/create" onsubmit="return validateForm()">
+                <table>
+                    <tr>
+                    <td>
+                    <div class="control-group" id="tipo_registo_div">
+                        <label class="control-label" for="tipo_registo"><i class="icon-map-marker"></i> Tipo de Registo:<span class="txt-req">*</span></label>
+                        <div class="controls">
+                            <?=$this->form->getElement('tipo_registo')->setDecorators(array('ViewHelper'));?>
+                        </div>
+                    </div>
+                   </td>
+                   </tr>
+                   <tr>
+                   <td>
+                    <div class="control-group" id="origem_div">
+                        <label class="control-label" for="origem"><i class="icon-filter"></i> Origem:<span class="txt-req">*</span></label>
+                        <div class="controls">
+                            <?=$this->form->getElement('origem')->setDecorators(array('ViewHelper'));?>
+                        </div>
+                    </div>
+                   </td>
+                   <td>
+                    <div class="control-group" id="sistema_div">
+                        <label class="control-label" for="sistema"><i class="icon-cog"></i> Sistema:<span class="txt-req">*</span></label>
+                        <div class="controls">
+                            <?=$this->form->getElement('sistema')->setDecorators(array('ViewHelper'));?>
+                        </div>
+                    </div>
+                   </td>
+                   </tr> 
+                 </table>
+                 
+                 <table>
+                     <tr>
+                         <td>
+                             <div class="control-group" id="obra_div">
+                                <label class="control-label" for="obra"><i class="icon-folder-open"></i> Obra:</label>
+                            <div class="controls">
+                            <?=$this->form->getElement('obra')->setDecorators(array('ViewHelper'))->setAttribs(array("onblur"=>"checkRepeatJob();", "onfocus"=>'onlyInt("obra");getJobParams();', "class"=>"input-small"));?>
+                            </div>
+                            </div>
+                         </td>
+                         <td>
+                             <div class="control-group" id="entidade_div">
+                                <label class="control-label" for="entidade"><i class="icon-group"></i> Entidade/Cliente:<span class="txt-req">*</span></label>
+                            <div class="controls">
+                            <?=$this->form->getElement('entidade')->setDecorators(array('ViewHelper'))->setAttribs(array('class '=> 'input-xlarge', "autocomplete"=>"off"));?>
+                            </div>
+                            </div>
+                         </td>
+                     </tr>
+                    </table> 
+                    <table>
+                     <tr>
+                         <td>
+                             <div class="control-group" id="trabalho_div">
+                                <label class="control-label" for="trabalho"><i class="icon-laptop"></i> Trabalho:<span class="txt-req">*</span></label>
+                            <div class="controls">
+                            <?=$this->form->getElement('trabalho')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=> 'input-xlarge', 'onblur'=>'revertCSS();'));?>
+                            </div>
+                            </div>
+                         </td>
+                         <td>
+                             <div class="control-group">
+                                <label class="control-label" for="jobtype"><i class="icon-eraser"></i> Tipo Trabalho:</label>
+                            <div class="controls">
+                            <?=$this->form->getElement('jobtype')->setDecorators(array('ViewHelper'))->setAttrib('class', 'input-small');?>
+                            </div>
+                            </div>
+                         </td>
+                     </tr>
+                 </table>       
+                  <table>
+                     <tr>
+                         <td>
+                             <div class="control-group">
+                                <label class="control-label" for="matcert"><i class="icon-leaf"></i> Mat. Prima Certf. (FSC/PEFC):</label>
+                            <div class="controls">
+                            <?=$this->form->getElement('matcert')->setDecorators(array('ViewHelper'));?>
+                            </div>
+                            </div>
+                         </td>
+                         <td>
+                             <div class="control-group">
+                                <label class="control-label" for="doc_referencia"><i class="icon-file"></i> Doc. Refer&ecirc;ncia:</label>
+                            <div class="controls">
+                            <?=$this->form->getElement('doc_referencia')->setDecorators(array('ViewHelper'));?>
+                            </div>
+                            </div>
+                         </td>
+                         <td>
+                             <div class="control-group">
+                                <label class="control-label" for="lote"><i class="icon-inbox"></i> Lote:</label>
+                            <div class="controls">
+                            <?=$this->form->getElement('lote')->setDecorators(array('ViewHelper'))->setAttrib('class', 'input-small');?>
+                            </div>
+                            </div>
+                         </td>
+                     </tr>
+                 </table>  
+                
+                 <table>
+                     <tr>
+                         <td>
+                             <div class="control-group">
+                                <label class="control-label" for="qtd_recebida"><i class="icon-download-alt"></i> Qtd. Recebida:</label>
+                            <div class="controls">
+                            <?=$this->form->getElement('qtd_recebida')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'input-small', 'onfocus'=>'onlyInt("qtd_recebida")'));?>
+                            </div>
+                            </div>
+                         </td>
+                         <td>
+                             <div class="control-group">
+                                <label class="control-label" for="qtd_reclamada"><i class="icon-bullhorn"></i> Qtd. Reclamada:</label>
+                            <div class="controls">
+                            <?=$this->form->getElement('qtd_reclamada')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'input-small', 'onfocus'=>'onlyInt("qtd_reclamada")'));?>
+                            </div>
+                            </div>
+                         </td>
+                         <td>
+                             <div class="control-group">
+                                <label class="control-label" for="qtd_falta"><i class="icon-upload-alt"></i> Qtd. em Falta:</label>
+                            <div class="controls">
+                            <?=$this->form->getElement('qtd_falta')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'input-small', 'onfocus'=>'onlyInt("qtd_falta")'));?>
+                            </div>
+                            </div>
+                         </td>
+                     </tr>
+                 </table> 
+                
+                <table>
+                     <tr>
+                         <td>
+                             <div class="control-group">
+                                <label class="control-label" for="ordem_compra"><i class="icon-file-alt"></i> Ordem Compra:</label>
+                            <div class="controls">
+                            <?=$this->form->getElement('ordem_compra')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'input-small'));?>
+                            </div>
+                            </div>
+                         </td>
+                         <td>
+                             <div class="control-group">
+                                <label class="control-label" for="amostra_disponivel"><i class="icon-picture"></i> Amostra Disponível:</label>
+                            <div class="controls">
+                            <?=$this->form->getElement('amostra_disponivel')->setDecorators(array('ViewHelper'));?>
+                            </div>
+                            </div>
+                         </td>
+                         <td>
+                             <div class="control-group">
+                                <label class="control-label" for="situacao_recorrente"><i class="icon-refresh"></i> Situação Recorrente:</label>
+                            <div class="controls">
+                            <?=$this->form->getElement('situacao_recorrente')->setDecorators(array('ViewHelper'));?>
+                            </div>
+                            </div>
+                         </td>
+                     </tr>
+                 </table> 
+                <div class="control-group" id="descricao_problema_div">
+                                <label class="control-label" for="descricao_problema"><i class="icon-edit"></i> Descri&ccedil;&atilde;o Problema:<span class="txt-req">*</span></label>
+                            <div class="controls">
+                            <?=$this->form->getElement('descricao_problema')->setDecorators(array('ViewHelper'))->setAttribs(array("rows"=>"5", "class"=>"span10"));?>
+                            </div>
+                </div>
+                
+                <table>
+                  <tr>
+                   <td>
+                    <div class="control-group" id="data_detectada_div">
+                        <label class="control-label" for="data_detectada">Data:</label>
+                        <div class="controls">
+                            <div class="input-prepend"><span class="add-on"><i class="icon-calendar"></i></span>
+                            <?=$this->form->getElement('data_detectada')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'input-small'));?>
+                            </div>
+                        </div>
+                    </div>
+                   </td>
+                   <td>
+                    <div class="control-group">
+                        <label class="control-label" for="detectado"><i class="icon-user"></i> Detectado por:</label>
+                        <div class="controls">
+                            <?=$this->form->getElement('detectado')->setDecorators(array('ViewHelper'));?>
+                        </div>
+                    </div>
+                   </td>
+                   </tr> 
+                 </table>
+                <div class="form-actions">
+                      <?=$this->form->getElement('submit')->setDecorators(array('ViewHelper'))->setAttribs(array('class'=>'btn btn-primary'));?>
+                </div>
+                
+             </form>   
+           
+            </div>
+        </div>
+    </div>
+
+<script type="text/javascript">
+	$(function() {
+		var availableTags = [<?=$this->customers;?>];
+		 $("#entidade").typeahead({
+			source: availableTags
+		});
+	});
+</script>  
+    
+<?php endif;?> 
+    
